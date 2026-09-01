@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{{ site.name|default:"CakeZone" }} - Master Chefs{% endblock %}
+
+{% block content %}
+    <!-- Team Start -->
+    <div class="container-fluid py-5">
+        <div class="container">
+            <div class="section-title position-relative text-center mx-auto mb-5 pb-3" style="max-width: 600px;">
+                <h2 class="text-primary font-secondary">{% trans "Team Members" %}</h2>
+                <h1 class="display-4 text-uppercase">{% trans "Our Master Chefs" %}</h1>
+            </div>
+            <div class="row g-5">
+                {% for chef in chefs %}
+                <div class="col-lg-4 col-md-6">
+                    <div class="team-item">
+                        <div class="position-relative overflow-hidden">
+                            {% if chef.photo %}
+                                <img class="img-fluid w-100" src="{{ chef.photo.url }}" alt="{{ chef.full_name }}">
+                            {% else %}
+                                <img class="img-fluid w-100" src="{% static 'images/team-1.jpg' %}" alt="{{ chef.full_name }}">
+                            {% endif %}
+                            <div class="team-overlay w-100 h-100 position-absolute top-50 start-50 translate-middle d-flex align-items-center justify-content-center">
+                                <div class="d-flex align-items-center justify-content-start">
+                                    <a class="btn btn-lg btn-primary btn-lg-square border-inner rounded-0 mx-1" href="{{ chef.twitter|default:'#' }}"><i class="fab fa-twitter fw-normal"></i></a>
+                                    <a class="btn btn-lg btn-primary btn-lg-square border-inner rounded-0 mx-1" href="{{ chef.facebook|default:'#' }}"><i class="fab fa-facebook-f fw-normal"></i></a>
+                                    <a class="btn btn-lg btn-primary btn-lg-square border-inner rounded-0 mx-1" href="{{ chef.linkedin|default:'#' }}"><i class="fab fa-linkedin-in fw-normal"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-dark border-inner text-center p-4">
+                            <h4 class="text-uppercase text-primary">{{ chef.full_name }}</h4>
+                            <p class="text-white m-0">{{ chef.designation }}</p>
+                            {% if chef.experience_years %}
+                                <p class="text-secondary m-0">{% trans "Experience" %}: {{ chef.experience_years }} {% trans "years" %}</p>
+                            {% endif %}
+                            {% if chef.biography %}
+                                <p class="text-secondary mt-2 mb-0">{{ chef.biography }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-12 text-center">
+                    <h4 class="text-uppercase">{% trans "No chefs have been added yet" %}</h4>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <!-- Team End -->
+{% endblock %}
