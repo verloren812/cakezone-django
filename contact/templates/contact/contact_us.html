@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{{ site.name|default:"CakeZone" }} - Contact Us{% endblock %}
+
+{% block content %}
+    <!-- Contact Start -->
+    <div class="container-fluid contact position-relative px-5" style="margin-top: 90px;">
+        <div class="container">
+            <div class="row g-5 mb-5">
+                <div class="col-lg-4 col-md-6">
+                    <div class="bg-primary border-inner text-center text-white p-5">
+                        <i class="bi bi-geo-alt fs-1 text-white"></i>
+                        <h6 class="text-uppercase my-2">{% trans "Our Office" %}</h6>
+                        <span>{{ contact_info.office_address|default:"The address is not set yet" }}</span>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="bg-primary border-inner text-center text-white p-5">
+                        <i class="bi bi-envelope-open fs-1 text-white"></i>
+                        <h6 class="text-uppercase my-2">{% trans "Email Us" %}</h6>
+                        <span>{{ contact_info.email|default:"The email is not set yet" }}</span>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="bg-primary border-inner text-center text-white p-5">
+                        <i class="bi bi-phone-vibrate fs-1 text-white"></i>
+                        <h6 class="text-uppercase my-2">{% trans "Call Us" %}</h6>
+                        <span>{{ contact_info.phone|default:"The phone is not set yet" }}</span>
+                    </div>
+                </div>
+            </div>
+
+            {% if contact_info %}
+            <div class="row g-5 mb-5">
+                <div class="col-lg-6">
+                    <div class="bg-dark border-inner text-white p-5">
+                        <h4 class="text-primary text-uppercase mb-3">{% trans "Working Hours" %}</h4>
+                        <p class="mb-1">{% trans "Monday - Friday" %}: {{ contact_info.working_hours_weekdays }}</p>
+                        <p class="mb-0">{% trans "Saturday - Sunday" %}: {{ contact_info.working_hours_weekend }}</p>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="bg-dark border-inner text-white p-5">
+                        <h4 class="text-primary text-uppercase mb-3">{% trans "Follow Us" %}</h4>
+                        <div class="d-flex">
+                            {% if contact_info.facebook %}<a class="btn btn-lg btn-primary btn-lg-square border-inner rounded-0 me-2" href="{{ contact_info.facebook }}"><i class="fab fa-facebook-f fw-normal"></i></a>{% endif %}
+                            {% if contact_info.instagram %}<a class="btn btn-lg btn-primary btn-lg-square border-inner rounded-0 me-2" href="{{ contact_info.instagram }}"><i class="fab fa-instagram fw-normal"></i></a>{% endif %}
+                            {% if contact_info.twitter %}<a class="btn btn-lg btn-primary btn-lg-square border-inner rounded-0 me-2" href="{{ contact_info.twitter }}"><i class="fab fa-twitter fw-normal"></i></a>{% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <div class="row justify-content-center">
+                <div class="col-lg-6">
+                    <form>
+                        <div class="row g-3">
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control bg-light border-0 px-4" placeholder="{% trans 'Your Name' %}" style="height: 55px;">
+                            </div>
+                            <div class="col-sm-6">
+                                <input type="email" class="form-control bg-light border-0 px-4" placeholder="{% trans 'Your Email' %}" style="height: 55px;">
+                            </div>
+                            <div class="col-sm-12">
+                                <input type="text" class="form-control bg-light border-0 px-4" placeholder="{% trans 'Subject' %}" style="height: 55px;">
+                            </div>
+                            <div class="col-sm-12">
+                                <textarea class="form-control bg-light border-0 px-4 py-3" rows="4" placeholder="{% trans 'Message' %}"></textarea>
+                            </div>
+                            <div class="col-sm-12">
+                                <button class="btn btn-primary border-inner w-100 py-3" type="submit">{% trans "Send Message" %}</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Contact End -->
+{% endblock %}

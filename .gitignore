@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# Virtual environment
+venv/
+.venv/
+env/
+
+# Django
+*.log
+local_settings.py
+
+# IDE
+.idea/
+.vscode/
+.DS_Store
+
+# db.sqlite3 is intentionally NOT ignored:
+# the task requires the prepared database with the demo data

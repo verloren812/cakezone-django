@@ -1,0 +1,190 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{{ site.name|default:"CakeZone" }} - Home{% endblock %}
+
+{% block content %}
+    <!-- Hero Start -->
+    <div class="container-fluid bg-primary py-5 mb-5 hero-header">
+        <div class="container py-5">
+            <div class="row justify-content-start">
+                <div class="col-lg-8 text-center text-lg-start">
+                    <h1 class="font-secondary text-primary mb-4">Super Crispy</h1>
+                    <h1 class="display-1 text-uppercase text-white mb-4">CakeZone</h1>
+                    <h1 class="text-uppercase text-white">The Best Cake In London</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Hero End -->
+
+
+    <!-- Video Modal Start -->
+    <div class="modal fade" id="videoModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content rounded-0">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Youtube Video</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- 16:9 aspect ratio -->
+                    <div class="ratio ratio-16x9">
+                        <iframe class="embed-responsive-item" src="" id="video" allowfullscreen allowscriptaccess="always"
+                            allow="autoplay"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Video Modal End -->
+
+
+    <!-- About Start -->
+    <div class="container-fluid pt-5">
+        <div class="container">
+            <div class="section-title position-relative text-center mx-auto mb-5 pb-3" style="max-width: 600px;">
+                <h2 class="text-primary font-secondary">{% trans "About Us" %}</h2>
+                <h1 class="display-4 text-uppercase">{% trans "Welcome To CakeZone" %}</h1>
+            </div>
+            <div class="row gx-5">
+                <div class="col-lg-5 mb-5 mb-lg-0" style="min-height: 400px;">
+                    <div class="position-relative h-100">
+                        {% if site.image %}
+                        <img class="position-absolute w-100 h-100" src="{{ site.image.url }}" style="object-fit: cover;" alt="{{ site.name }}">
+                        {% else %}
+                        <img class="position-absolute w-100 h-100" src="{% static 'images/about.jpg' %}" style="object-fit: cover;" alt="{{ site.name }}">
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="col-lg-6 pb-5">
+                    <h4 class="mb-4">{{ site.slogan|default:"Handmade cakes for your celebrations" }}</h4>
+                    <p class="mb-5">{{ site.description|default:"The information about the bakery will appear after it is filled in the admin site." }}</p>
+                    <div class="row g-5">
+                        <div class="col-sm-6">
+                            <div class="d-flex align-items-center justify-content-center bg-primary border-inner mb-4" style="width: 90px; height: 90px;">
+                                <i class="fa fa-heartbeat fa-2x text-white"></i>
+                            </div>
+                            <h4 class="text-uppercase">100% Healthy</h4>
+                            <p class="mb-0">Labore justo vero ipsum sit clita erat lorem magna clita nonumy dolor magna dolor vero</p>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="d-flex align-items-center justify-content-center bg-primary border-inner mb-4" style="width: 90px; height: 90px;">
+                                <i class="fa fa-award fa-2x text-white"></i>
+                            </div>
+                            <h4 class="text-uppercase">Award Winning</h4>
+                            <p class="mb-0">Labore justo vero ipsum sit clita erat lorem magna clita nonumy dolor magna dolor vero</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- About End -->
+
+
+    <!-- Facts Start -->
+    <div class="container-fluid bg-img py-5 mb-5">
+        <div class="container py-5">
+            <div class="row gx-5 gy-4">
+                <div class="col-lg-3 col-md-6">
+                    <div class="d-flex">
+                        <div class="bg-primary border-inner d-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                            <i class="fa fa-star text-white"></i>
+                        </div>
+                        <div class="ps-4">
+                            <h6 class="text-primary text-uppercase">Our Experience</h6>
+                            <h1 class="display-5 text-white mb-0" data-toggle="counter-up">{{ site.years_of_experience|default:0 }}</h1>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="d-flex">
+                        <div class="bg-primary border-inner d-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                            <i class="fa fa-users text-white"></i>
+                        </div>
+                        <div class="ps-4">
+                            <h6 class="text-primary text-uppercase">Cake Specialist</h6>
+                            <h1 class="display-5 text-white mb-0" data-toggle="counter-up">{{ site.master_chefs|default:0 }}</h1>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="d-flex">
+                        <div class="bg-primary border-inner d-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                            <i class="fa fa-check text-white"></i>
+                        </div>
+                        <div class="ps-4">
+                            <h6 class="text-primary text-uppercase">Complete Project</h6>
+                            <h1 class="display-5 text-white mb-0" data-toggle="counter-up">{{ site.cakes_baked|default:0 }}</h1>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="d-flex">
+                        <div class="bg-primary border-inner d-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                            <i class="fa fa-mug-hot text-white"></i>
+                        </div>
+                        <div class="ps-4">
+                            <h6 class="text-primary text-uppercase">Happy Clients</h6>
+                            <h1 class="display-5 text-white mb-0" data-toggle="counter-up">{{ site.happy_clients|default:0 }}</h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Facts End -->
+
+
+    <!-- Offer Start -->
+    <div class="container-fluid bg-offer my-5 py-5">
+        <div class="container py-5">
+            <div class="row gx-5 justify-content-center">
+                <div class="col-lg-7 text-center">
+                    <div class="section-title position-relative text-center mx-auto mb-4 pb-3" style="max-width: 600px;">
+                        <h2 class="text-primary font-secondary">Special Kombo Pack</h2>
+                        <h1 class="display-4 text-uppercase text-white">Super Crispy Cakes</h1>
+                    </div>
+                    <p class="text-white mb-4">Eirmod sed tempor lorem ut dolores sit kasd ipsum. Dolor ea et dolore et at sea ea at dolor justo ipsum duo rebum sea. Eos vero eos vero ea et dolore eirmod et. Dolores diam duo lorem. Elitr ut dolores magna sit. Sea dolore sed et.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Offer End -->
+
+
+    <!-- Testimonial Start -->
+    <div class="container-fluid py-5">
+        <div class="container">
+            <div class="section-title position-relative text-center mx-auto mb-5 pb-3" style="max-width: 600px;">
+                <h2 class="text-primary font-secondary">{% trans "Testimonial" %}</h2>
+                <h1 class="display-4 text-uppercase">{% trans "Our Clients Say!!!" %}</h1>
+            </div>
+            <div class="owl-carousel testimonial-carousel">
+                {% for testimonial in testimonials %}
+                <div class="testimonial-item bg-dark text-white border-inner p-4">
+                    <div class="d-flex align-items-center mb-3">
+                        {% if testimonial.photo %}
+                            <img class="img-fluid flex-shrink-0" src="{{ testimonial.photo.url }}" style="width: 60px; height: 60px; object-fit: cover;" alt="{{ testimonial.author_name }}">
+                        {% else %}
+                            <img class="img-fluid flex-shrink-0" src="{% static 'images/testimonial-1.jpg' %}" style="width: 60px; height: 60px;" alt="{{ testimonial.author_name }}">
+                        {% endif %}
+                        <div class="ps-3">
+                            <h4 class="text-primary text-uppercase mb-1">{{ testimonial.author_name }}</h4>
+                            <span>{{ testimonial.profession }}</span>
+                        </div>
+                    </div>
+                    <p class="mb-2">{{ testimonial.text }}</p>
+                    <small class="text-primary">{% trans "Rating" %}: {{ testimonial.rating }} / 5</small>
+                </div>
+                {% empty %}
+                <div class="testimonial-item bg-dark text-white border-inner p-4">
+                    <p class="mb-0">{% trans "There are no testimonials yet." %}</p>
+                </div>
+                {% endfor %}
+            </div>
+    <!-- Testimonial End -->
+    
+{% endblock %}
