@@ -11,7 +11,7 @@ cakezone/
 ├── templates/
 │   ├── index.html     # base template: header, navigation, footer, styles and scripts
 │   └── base.html      # the same template under the usual name: {% extends "index.html" %}
-├── static/            # css, js, images, lib, scss
+├── static/            # css, js, images, lib
 ├── media/             # uploaded files: chef and dish photos
 ├── main/              # "Home" section          -> /
 ├── menu/              # "Menu & Pricing"        -> /menu/
@@ -62,6 +62,7 @@ re_path(r"^(?P<category>[a-z][a-z-]{2,20})/$", views.category, name="category")
 | team | `Chef` | chefs: name, designation, photo, biography, experience, social links |
 | service | `Service` | services: title, description, icon, price from |
 | contact | `ContactInfo` | contacts: address, email, phone, working hours, social links, map code |
+| contact | `ContactMessage` | a message from the form: name, email, subject, text, received at, processed |
 
 There is one relation between the models: `Dish.category` → `Category`
 (`related_name="dishes"`), deleting a category deletes its dishes (`on_delete=CASCADE`).
@@ -70,7 +71,7 @@ There is one relation between the models: `Dish.category` → `Category`
 
 ```python
 STATIC_URL = "static/"
-STATICFILES_DIRS = [BASE_DIR / "static"]   # css/, js/, images/, lib/, scss/
+STATICFILES_DIRS = [BASE_DIR / "static"]   # css/, js/, images/, lib/
 
 MEDIA_URL = "media/"
 MEDIA_ROOT = BASE_DIR / "media"            # chef and dish photos
@@ -105,14 +106,40 @@ Because of that the header and the footer of `templates/index.html` are filled f
 database instead of being hardcoded in the markup. The labels themselves are wrapped in
 `{% trans %}`, so the site is ready for translation.
 
+## Feedback form
+
+The Contact Us page carries a working form: a visitor writes a message, it is validated on
+the server and stored in the database.
+
+| File | Role |
+|---|---|
+| `contact/models.py` | `ContactMessage` — the stored message |
+| `contact/forms.py` | `ContactMessageForm` — a `ModelForm` over that model, with the Bootstrap widgets of the template |
+| `contact/views.py` | `index` — serves both the GET and the POST of the same address |
+| `contact/templates/contact/contact_us.html` | renders the fields, their errors and the confirmation |
+| `contact/admin.py` | `ContactMessageAdmin` — the received messages, read-only |
+
+Validation happens in three layers: the field types of the model (the name is required, the
+address must be a valid email), the `max_length` of the columns, and `clean_message()` in
+the form, which rejects messages shorter than 10 characters.
+
+After a successful save the view answers with a redirect instead of a page
+(**Post/Redirect/Get**), so pressing F5 no longer offers to send the data once more. The
+confirmation survives the redirect through `django.contrib.messages` and is shown exactly
+once. The form itself is protected by `{% csrf_token %}`.
+
+In the admin site the text and the address of the sender are `readonly_fields`: a received
+message must not be edited, only marked as processed.
+
 ## Admin site
 
 All models are registered in the `admin.py` of their applications with `list_display`,
 `list_filter` and `search_fields`; the category slug is filled automatically
 (`prepopulated_fields`). The panel titles are set in `cakezone/urls.py`.
 
-Superuser for the review: **admin / admin12345** (the `/admin/` address).
-To create your own: `python manage.py createsuperuser`.
+`python manage.py seed_demo` creates a demo administrator for the local database:
+**admin / admin12345** (the `/admin/` address). The prepared `db.sqlite3` of the repository
+already contains it. For an account of your own: `python manage.py createsuperuser`.
 
 ## How to run
 
@@ -135,7 +162,9 @@ python manage.py seed_demo
 The command (`main/management/commands/seed_demo.py`) clears the section tables and fills
 them with examples: the establishment with counters, 4 testimonials, 3 categories with
 7 cakes, 3 chefs, 3 services and the contacts. Images are copied from `static/images`
-into `media/`, so `MEDIA_ROOT` / `MEDIA_URL` can be seen in action.
+into `media/`, so `MEDIA_ROOT` / `MEDIA_URL` can be seen in action. The command also creates
+the demo administrator described above, if it is missing.
 
-The repository already contains the `0001_initial` migrations of all five applications
-and the prepared `db.sqlite3` database.
+The repository contains the migrations of all five applications (`contact` has a second one,
+`0002_contactmessage`) and the prepared `db.sqlite3` database with the demo data and the demo
+administrator.
