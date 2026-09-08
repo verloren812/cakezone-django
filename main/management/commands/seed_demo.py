@@ -4,6 +4,7 @@ import shutil
 from pathlib import Path
 
 from django.conf import settings
+from django.contrib.auth import get_user_model
 from django.core.management.base import BaseCommand
 
 from contact.models import ContactInfo
@@ -11,6 +12,12 @@ from main.models import Establishment, Testimonial
 from menu.models import Category, Dish
 from service.models import Service
 from team.models import Chef
+
+
+# Demo administrator for the local SQLite database only - not a real account.
+DEMO_ADMIN_NAME = "admin"
+DEMO_ADMIN_EMAIL = "admin@example.com"
+DEMO_ADMIN_PASSWORD = "admin12345"
 
 
 def copy_image(source_name, folder):
@@ -153,4 +160,19 @@ class Command(BaseCommand):
             twitter="https://twitter.com/",
         )
 
+        self.create_demo_superuser()
+
         self.stdout.write(self.style.SUCCESS("Demo data has been added."))
+
+    def create_demo_superuser(self):
+        """Creates the demo administrator for the local database (review access)."""
+        user_model = get_user_model()
+        if user_model.objects.filter(username=DEMO_ADMIN_NAME).exists():
+            self.stdout.write("Demo administrator already exists: %s" % DEMO_ADMIN_NAME)
+            return
+        user_model.objects.create_superuser(
+            DEMO_ADMIN_NAME, DEMO_ADMIN_EMAIL, DEMO_ADMIN_PASSWORD,
+        )
+        self.stdout.write(
+            "Demo administrator created: %s / %s" % (DEMO_ADMIN_NAME, DEMO_ADMIN_PASSWORD)
+        )
