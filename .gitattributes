@@ -1,0 +1,15 @@
+# Store every text file with LF in the repository,
+# check it out with the line endings native to the developer's system.
+* text=auto
+
+# Binary files must never be converted.
+*.jpg binary
+*.jpeg binary
+*.png binary
+*.gif binary
+*.ico binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.eot binary
+*.sqlite3 binary
