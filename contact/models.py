@@ -29,3 +29,23 @@ class ContactInfo(models.Model):
 
     def __str__(self):
         return "Contacts: " + self.office_address
+
+
+class ContactMessage(models.Model):
+    """A message sent through the form on the Contact Us page."""
+
+    name = models.CharField("name", max_length=100)
+    email = models.EmailField("email")
+    subject = models.CharField("subject", max_length=150)
+    message = models.TextField("message")
+
+    created_at = models.DateTimeField("received at", auto_now_add=True)
+    is_processed = models.BooleanField("processed", default=False)
+
+    class Meta:
+        verbose_name = "message from the form"
+        verbose_name_plural = "messages from the form"
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return "%s - %s" % (self.name, self.subject)
