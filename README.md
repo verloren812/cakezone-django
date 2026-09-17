@@ -7,7 +7,8 @@ The project is built on top of the `cakezone_class` HTML template.
 ```
 cakezone/
 ├── manage.py
-├── cakezone/          # project settings: settings.py, urls.py, wsgi.py, asgi.py
+├── cakezone/          # project package: settings/, urls.py, wsgi.py, asgi.py
+│   └── settings/      # base.py (common), dev.py (development), prod.py (production)
 ├── templates/
 │   ├── index.html     # base template: header, navigation, footer, styles and scripts
 │   └── base.html      # the same template under the usual name: {% extends "index.html" %}
@@ -70,12 +71,17 @@ There is one relation between the models: `Dish.category` → `Category`
 ## Static files and media
 
 ```python
-STATIC_URL = "static/"
+STATIC_URL = "/static/"
 STATICFILES_DIRS = [BASE_DIR / "static"]   # css/, js/, images/, lib/
+STATIC_ROOT = BASE_DIR / "staticfiles"     # target of collectstatic (not committed)
 
-MEDIA_URL = "media/"
+MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"            # chef and dish photos
 ```
+
+In production run `python manage.py collectstatic` and let the web server (nginx)
+serve `staticfiles/` at `/static/` and `media/` at `/media/`: Django serves media only
+when `DEBUG = True`.
 
 Static files are linked with the `{% static %}` tag:
 
@@ -141,12 +147,47 @@ All models are registered in the `admin.py` of their applications with `list_dis
 **admin / admin12345** (the `/admin/` address). The prepared `db.sqlite3` of the repository
 already contains it. For an account of your own: `python manage.py createsuperuser`.
 
+## Settings and environment variables
+
+The settings are split into a package:
+
+| Module | Purpose | Used by default in |
+|---|---|---|
+| `cakezone/settings/base.py` | common settings, reads the environment and `.env` | — |
+| `cakezone/settings/dev.py` | `DEBUG` on, hosts `localhost`, `127.0.0.1` | `manage.py` |
+| `cakezone/settings/prod.py` | `DEBUG = False`, HTTPS and secure cookies, required key and hosts | `wsgi.py`, `asgi.py` |
+
+Another module is chosen with the `DJANGO_SETTINGS_MODULE` environment variable.
+No secrets are stored in the code: copy `.env.example` to `.env` (it is in `.gitignore`)
+and fill in the values.
+
+| Variable | dev | prod |
+|---|---|---|
+| `DJANGO_SECRET_KEY` | optional (without it a random key is generated on every start, so the admin login is reset on restart) | **required** |
+| `DJANGO_DEBUG` | `true` by default | ignored, always `False` |
+| `DJANGO_ALLOWED_HOSTS` | `localhost,127.0.0.1,[::1]` by default | **required**, e.g. `cakezone.example.com` |
+| `DJANGO_CSRF_TRUSTED_ORIGINS` | not needed | e.g. `https://cakezone.example.com` |
+| `DJANGO_SECURE_SSL` | — | `true` by default; `false` to try prod settings without HTTPS |
+
+A secret key is generated with:
+
+```bash
+python -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"
+```
+
+Production check:
+
+```bash
+DJANGO_SETTINGS_MODULE=cakezone.settings.prod python manage.py check --deploy
+```
+
 ## How to run
 
 ```bash
 python -m venv venv
 venv\Scripts\activate        # Windows
 pip install -r requirements.txt
+copy .env.example .env       # Windows (cp on Linux/macOS), then set DJANGO_SECRET_KEY
 python manage.py migrate
 python manage.py runserver
 ```

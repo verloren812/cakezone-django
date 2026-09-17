@@ -11,6 +11,10 @@ env/
 # Django
 *.log
 local_settings.py
+staticfiles/
+
+# Environment variables (secrets)
+.env
 
 # IDE
 .idea/
